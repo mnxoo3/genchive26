@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>계란학살자 · 아티스트 메시지 보관 기록</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-default">
+<div class="app" id="app">
+  <header class="top" id="top">
+    <button class="back" id="backBtn" type="button" aria-label="홈으로"></button>
+    <div class="title" id="titleBtn" role="button" tabindex="0" aria-label="날짜 검색·단어 찾기 메뉴">
+      <div class="name-line"><span id="hName"></span><i class="chev" aria-hidden="true"></i></div>
+      <div class="sub" id="hSub"></div>
+    </div>
+    <button class="fn" id="fnBtn" aria-label="번역 설정"><i class="ico-translate"></i></button>
+    <div class="menu" id="menu" hidden>
+      <button id="miBg" hidden>배경 변경</button>
+      <button id="miDate">날짜 검색</button>
+      <button id="miWord">단어 찾기</button>
+    </div>
+  </header>
+
+  <section class="panel" id="datePanel" hidden>
+    <div class="row">
+      <input type="date" id="dateInput" class="field">
+      <button class="go" id="dateGo">이동</button>
+      <button class="x" data-close="datePanel" aria-label="닫기">✕</button>
+    </div>
+    <select id="dateSelect" class="field"></select>
+  </section>
+
+  <section class="wpanel" id="wordPanel" hidden>
+    <div class="w-field"><i class="w-ico"></i><input type="search" id="wordInput" placeholder="검색어 입력" autocomplete="off" enterkeyhint="search"></div>
+    <span class="count" id="wordCount"></span>
+    <button class="w-nav w-up" id="wordPrev" type="button" aria-label="이전 결과"></button>
+    <button class="w-nav w-down" id="wordNext" type="button" aria-label="다음 결과"></button>
+    <button class="w-x" data-close="wordPanel" type="button" aria-label="닫기"></button>
+  </section>
+  <div class="chatwrap"><main class="chat" id="chat" tabindex="0"><div class="chat-inner" id="chatInner"></div></main>
+    <div class="slider" id="slider" aria-label="스크롤 위치 조절" role="scrollbar"><div class="thumb" id="thumb"></div></div></div>
+
+  <button class="latest" id="latest" aria-label="최신 메시지로 이동"><i></i></button>
+  <footer class="bottom"><div class="pill"><i class="ico-lock"></i><span id="bottomText">아티스트 메시지 보관 기록</span></div></footer>
+</div>
+
+<div class="home" id="home" aria-label="홈" hidden>
+  
+  <main class="h-main" id="homeMain">
+    <div class="h-prof"><img class="h-av" id="hAv" alt=""><div><div class="h-name"><span id="hNm"></span><i class="h-chk"></i></div><div class="h-days" id="hDays"></div></div></div>
+    <div class="h-car">
+      <div class="h-track" id="hTrack"></div>
+      <button class="h-next" id="hNext" type="button" aria-label="다음 사진"></button>
+    </div>
+    <div class="h-dots" id="hDots"></div>
+    <div class="h-sec"><span>최근 메시지</span><button class="h-more" id="hMore" type="button">대화 보기</button></div>
+    <div class="h-list" id="hList"></div>
+    <div class="h-stats" id="hStats"></div>
+  </main>
+  <section class="pg-story" id="pgStory" aria-label="스토리">
+    <header class="s-top"><div class="s-title">Story</div></header>
+    <div class="s-scroll" id="sScroll">
+      <div class="s-members" id="sMembers"></div>
+      <div class="s-feed" id="sFeed"></div>
+    </div>
+  </section>
+  <nav class="tabbar" aria-label="메뉴">
+    <button class="tab on" data-tab="home" type="button"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="tab" data-tab="story" type="button"><i class="ti ti-story"></i><span>Story</span></button>
+    <button class="tab" data-tab="contents" type="button"><i class="ti ti-contents"></i><span>Contents</span></button>
+    <button class="tab" data-tab="community" type="button"><i class="ti ti-community"></i><span>Community</span></button>
+    <button class="tab" data-tab="shop" type="button"><i class="ti ti-shop"></i><span>Shop</span></button>
+    <button class="tab" data-tab="pop" type="button"><i class="ti ti-pop"></i><span>POP</span></button>
+  </nav>
+  <div class="toast" id="toast" hidden></div>
+</div>
+
+<div class="sdetail" id="sDetail" role="dialog" aria-label="게시물" hidden>
+  <header class="sd-top"><button class="sd-back" id="sdBack" type="button" aria-label="뒤로"></button><div class="sd-title">게시물</div></header>
+  <div class="sd-scroll" id="sdBody"></div>
+</div>
+
+<div class="gate" id="gate" role="dialog" aria-label="비밀번호">
+  <div class="g-box">
+    <div class="g-title">비밀번호</div>
+    <input class="g-in" id="gatePw" type="password" inputmode="numeric" autocomplete="off" placeholder="비밀번호를 입력하세요" enterkeyhint="go" aria-label="비밀번호">
+    <button class="g-go" id="gateGo" type="button">입력</button>
+    <div class="g-msg" id="gateMsg" aria-live="polite"></div>
+  </div>
+  <div class="g-check" id="gateCheck" hidden><span class="g-spin"></span><div>확인 중...</div></div>
+  <div class="g-alert" id="gateAlert" role="alertdialog" aria-modal="true" aria-labelledby="gaT" hidden>
+    <div class="ga-card"><div class="ga-t" id="gaT">비밀번호가 일치하지 않아요</div><div class="ga-d">다시 한 번 확인해 주세요.</div><button class="ga-ok" id="gaOk" type="button">확인</button></div>
+  </div>
+</div>
+
+<div class="sheet-dim" id="sheetDim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="번역 설정" hidden>
+  <div class="grab" id="sheetGrab"></div>
+  <div class="sh-title">번역 설정</div>
+  <div class="sh-row"><span>번역 사용</span><button class="switch" id="trSwitch" role="switch" aria-checked="false" aria-label="번역 사용"><i></i></button></div>
+  <p class="sh-desc">번역 언어는 비스테이지에 설정한 언어가 아닌 사용 중인 모바일 기기에 설정된 언어로 자동 번역됩니다. 번역 제공 언어가 없는 언어일 경우 비스테이지에 설정한 언어로 번역됩니다.</p>
+  <p class="sh-desc sh-gap">[번역 제공 언어]<br>한국어 / 영어 / 일본어 / 중국어 간체 / 중국어 번체 / 베트남어 / 태국어 / 인도네시아어 / 프랑스어 / 스페인어 / 러시아어 / 독일어 / 이탈리아어</p>
+</div>
+
+<div class="sheet psheet" id="psheet" role="dialog" aria-modal="true" aria-label="아티스트 정보" hidden>
+  <div class="grab"></div>
+  <img class="p-av" id="pAv" alt="">
+  <div class="p-name" id="pName"></div>
+  <div class="p-sec"><span>보관함</span><button class="p-all" id="pAll" type="button">전체보기</button></div>
+  <div class="p-thumbs" id="pThumbs"></div>
+  <div class="p-sec p-sec2"><span>맞춤 설정</span></div>
+  <div class="p-card">
+    <button class="p-row" id="pDate" type="button"><i class="ic ic-cal"></i><span>날짜 검색</span></button>
+    <button class="p-row" id="pWord" type="button"><i class="ic ic-search"></i><span>대화 검색</span></button>
+  </div>
+  <div class="p-card p-exit"><button class="p-row" id="pExit" type="button"><i class="ic ic-exit"></i><span>나가기</span></button></div>
+</div>
+
+<div class="sheet csheet" id="csheet" role="dialog" aria-modal="true" aria-label="달력" hidden>
+  <div class="grab"></div>
+  <div class="c-title" id="cTitle">달력</div>
+  <button class="c-x" id="cClose" type="button" aria-label="닫기"></button>
+  <div class="c-nav"><button class="c-arrow c-prev" id="cPrev" type="button" aria-label="이전 달"></button><div class="c-month" id="cMonth"></div><button class="c-arrow c-next" id="cNext" type="button" aria-label="다음 달"></button></div>
+  <div class="c-grid c-wd" id="cWd"></div>
+  <div class="c-grid c-days" id="cDays"></div>
+  <button class="c-latest" id="cLatest" type="button">마지막 팝으로</button>
+</div>
+
+<div class="gallery" id="gallery" role="dialog" aria-label="보관함" hidden>
+  <div class="g-bar"><button class="g-back" id="gBack" type="button" aria-label="뒤로"></button><div class="g-title" id="gTitle">보관함</div><button class="g-sel" id="gSel" type="button">선택</button></div>
+  <div class="g-grid" id="gGrid"></div>
+  <button class="g-dl" id="gDl" type="button" hidden>다운로드</button>
+</div>
+
+<div class="sview" id="sView" role="dialog" aria-label="사진" hidden>
+  <div class="sv-stage" id="svStage"><img id="svImg" alt="" draggable="false"></div>
+  <div class="sv-dots" id="svDots"></div>
+  <div class="sv-bar">
+    <button class="sv-btn sv-zoom" id="svZoom" type="button" aria-label="확대"></button>
+    <button class="sv-btn sv-dl" id="svDl" type="button" aria-label="다운로드"></button>
+    <button class="sv-btn sv-x" id="svClose" type="button" aria-label="닫기"></button>
+  </div>
+</div>
+
+<div class="viewer" id="viewer" hidden>
+  <div class="vstage"><img id="vImg" alt=""></div>
+  <div class="vbar">
+    <button class="vback" id="vClose" aria-label="뒤로"><i></i></button>
+    <img class="vav" id="vAv" alt="">
+    <div class="vwho"><div class="vnm" id="vNm"></div><div class="vtm" id="vTm"></div></div>
+    <button class="vsave" id="vSave" aria-label="저장"><i></i></button>
+  </div>
+</div>
+
+<script src="data/messages.js"></script>
+<script src="data/translations.js"></script>
+<script src="data/story.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
